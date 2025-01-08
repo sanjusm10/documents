@@ -296,42 +296,42 @@ Creating a robust architecture for an online shopping application involves sever
                 +----------+----------+
                            |
                            v
-+------------+   +------------+   +------------+   +------------+   +------------+
-| User Mgmt  |   | Product Mgmt |   | Order Mgmt  |   | Cust Support |   | Marketing  |
-|  Service   |   |   Service    |   |   Service   |   |    Service   |   |   Service  |
-+------------+   +------------+   +------------+   +------------+   +------------+
++------------+   +--------------+    +------------+   +--------------+   +------------+
+| User Mgmt  |   | Product Mgmt |    | Order Mgmt |   | Cust Support |   | Marketing  |
+|  Service   |   |   Service    |    |   Service  |   |    Service   |   |   Service  |
++------------+    +-------------+    +------------+   +--------------+   +------------+
                            |
                            v
-+------------+   +------------+   +------------+   +------------+
-| Analytics  |   | Logistics  |   | Content    |   |   Payment   |
-|  Service   |   |   Service  |   | Mgmt Service|   |  Gateway    |
-+------------+   +------------+   +------------+   +------------+
++------------+   +------------+   +-------------+   +------------+
+| Analytics  |   | Logistics  |   | Content     |   |   Payment  |
+|  Service   |   |   Service  |   | Mgmt Service|   |  Gateway   |
++------------+   +------------+   +-------------+   +------------+
                            |
                            v
-                +----------+----------+
-                |      Data Management |
-                |  (DB, Cache, Storage)|
-                +----------------------+
+                +----------+------------+
+                |      Data Management  |
+                |  (DB, Cache, Storage) |
+                +-----------------------+
                            |
                            v
-                +----------+----------+
+                +----------+------------+
                 | Security & Compliance|
+                +-----------------------+
+                           |
+                           v
+                +----------+-----------+
+                | Monitoring & Logging |
                 +----------------------+
                            |
                            v
-                +----------+----------+
-                | Monitoring & Logging|
-                +----------------------+
-                           |
-                           v
-                +----------+----------+
+                +----------+-----------+
                 |  Event-Driven Arch.  |
                 +----------------------+
                            |
                            v
                 +----------+----------+
                 |   DevOps & CI/CD    |
-                +----------------------+
+                +---------------------+
 ```
 
 This high-level architecture provides a modular and scalable approach to building an online shopping application, leveraging the benefits of microservices and cloud services.
