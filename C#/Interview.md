@@ -106,13 +106,20 @@ In summary, private constructors are a powerful tool in C# that provide fine-gra
 
 In C#, both `IEnumerable` and `IEnumerator` are interfaces used for iterating over collections. Here's a detailed look at each, including their uses and differences:
 
+- IEnumerable does not remembers cursor state where as IEnumerator does.
+- If your requirement is to just loop sequentially through collection one by one and you are not intersted in where the cursor is currently then IEnumerable is best fit. Syntax is much smaller.
+- When you pass the IEnumerator from one function another function and remember the current cursor position then IEnumerator is best fit.
+- IEnumerable uses IEnumerator internally.
+
 ### **IEnumerable**
 
+- **Imp**: IEnumerable helps to iterate over a collection without knowing the actual type.It acts like an abstraction.
 - **Namespace**: `System.Collections` or `System.Collections.Generic` (for generics).
 - **Purpose**: Represents a collection that can be enumerated.
 - **Key Method**: `GetEnumerator()`, which returns an `IEnumerator` object.
 - **Usage**: Used with `foreach` loops for easy iteration over collections.
 
+![IEnumerable](IEnumerable.png)
 **Example**:
 
 ```csharp
@@ -150,6 +157,8 @@ public class Program
 - **Purpose**: Provides the mechanism for iterating over a collection.
 - **Key Methods**: `MoveNext()`, `Reset()`, and the `Current` property.
 - **Usage**: Typically used internally by `IEnumerable` implementations.
+
+![IEnumerator](IEnumerator.png)
 
 **Example**:
 
@@ -244,6 +253,8 @@ In C#, both `IEnumerable` and `IQueryable` are used to represent collections of 
 - **Deferred Execution**: Supports deferred execution, meaning the query is not executed until the data is enumerated (e.g., using `foreach` loop).
 - **Extension Methods**: LINQ extension methods for `IEnumerable` are defined in `System.Linq.Enumerable`.
 
+![IEnumerableClientFilter](IEnumerableClientFilter.png)
+
 **Example**:
 
 ```csharp
@@ -263,6 +274,8 @@ foreach (int number in query)
 - **Execution**: Executes queries against a remote data source. The query is translated to the appropriate query language (e.g., SQL for databases) and executed on the data source.
 - **Deferred Execution**: Supports deferred execution, similar to `IEnumerable`.
 - **Extension Methods**: LINQ extension methods for `IQueryable` are defined in `System.Linq.Queryable`.
+
+![IQueryableDatabaseFilter](IQueryableDatabaseFilter.png)
 
 **Example**:
 
@@ -296,4 +309,132 @@ using (var context = new MyDbContext())
 
 By understanding these differences, you can make informed decisions on which interface to use based on your specific needs and the characteristics of your data source.
 
-k!
+## ***4. Yield keyword***
+
+The `yield` keyword in C# is used to simplify the creation of iterators, which are used to traverse collections or streams of data. It enables the implementation of a stateful iterator method without the need to explicitly maintain the state and manage the enumeration logic.
+
+![yield](Yield.png)
+
+Here are some real-time usage examples:
+
+### **1. Simplifying Iterators**
+
+The `yield` keyword is used to produce elements one at a time, as they are needed. This approach can simplify the code and improve readability.
+
+**Example**:
+
+```csharp
+public IEnumerable<int> GetEvenNumbers(int max)
+{
+    for (int i = 0; i <= max; i += 2)
+    {
+        yield return i;
+    }
+}
+
+public static void Main()
+{
+    var evenNumbers = GetEvenNumbers(10);
+    foreach (var num in evenNumbers)
+    {
+        Console.WriteLine(num); // Output: 0, 2, 4, 6, 8, 10
+    }
+}
+```
+
+### **2. Infinite Sequences**
+
+The `yield` keyword can be used to generate infinite sequences in a memory-efficient way.
+
+**Example**:
+
+```csharp
+public IEnumerable<int> GetFibonacciSequence()
+{
+    int a = 0;
+    int b = 1;
+    while (true)
+    {
+        yield return a;
+        int temp = a;
+        a = b;
+        b = temp + b;
+    }
+}
+
+public static void Main()
+{
+    var fibonacci = GetFibonacciSequence().Take(10);
+    foreach (var num in fibonacci)
+    {
+        Console.WriteLine(num); // Output: 0, 1, 1, 2, 3, 5, 8, 13, 21, 34
+    }
+}
+```
+
+### **3. Filtering Data Streams**
+
+The `yield` keyword can be used to filter data streams efficiently.
+
+**Example**:
+
+```csharp
+public IEnumerable<int> FilterData(IEnumerable<int> data, Func<int, bool> predicate)
+{
+    foreach (var item in data)
+    {
+        if (predicate(item))
+        {
+            yield return item;
+        }
+    }
+}
+
+public static void Main()
+{
+    var numbers = new List<int> { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 };
+    var filteredNumbers = FilterData(numbers, n => n > 5);
+
+    foreach (var num in filteredNumbers)
+    {
+        Console.WriteLine(num); // Output: 6, 7, 8, 9, 10
+    }
+}
+```
+
+### **4. State Machines**
+
+The `yield` keyword can be used to implement state machines, making it easier to manage state transitions.
+
+**Example**:
+
+```csharp
+public IEnumerable<string> StateMachine()
+{
+    yield return "State 1";
+    yield return "State 2";
+    yield return "State 3";
+}
+
+public static void Main()
+{
+    var states = StateMachine();
+    foreach (var state in states)
+    {
+        Console.WriteLine(state); // Output: State 1, State 2, State 3
+    }
+}
+```
+
+### **How It Works**
+
+- **`yield return`**: Returns each element one at a time and maintains the current state of the method.
+- **State Management**: The compiler generates a state machine behind the scenes, allowing the method to pause and resume execution, making it easier to handle complex iterations.
+
+### **Benefits**
+
+- **Simplicity**: Simplifies the code by removing the need to manually manage state and iterators.
+- **Efficiency**: Produces elements as needed, which can improve memory usage and performance.
+- **Readability**: Makes the code more readable and maintainable by abstracting the complexity of iterators.
+
+Using the `yield` keyword can greatly simplify the process of creating iterators and handling sequences, making your code more efficient and easier to understand.
