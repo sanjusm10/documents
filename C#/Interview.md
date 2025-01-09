@@ -119,7 +119,7 @@ In C#, both `IEnumerable` and `IEnumerator` are interfaces used for iterating ov
 - **Key Method**: `GetEnumerator()`, which returns an `IEnumerator` object.
 - **Usage**: Used with `foreach` loops for easy iteration over collections.
 
-![IEnumerable](IEnumerable.png)
+![IEnumerable](Images/IEnumerable.png)
 **Example**:
 
 ```csharp
@@ -158,7 +158,7 @@ public class Program
 - **Key Methods**: `MoveNext()`, `Reset()`, and the `Current` property.
 - **Usage**: Typically used internally by `IEnumerable` implementations.
 
-![IEnumerator](IEnumerator.png)
+![IEnumerator](Images/IEnumerator.png)
 
 **Example**:
 
@@ -253,7 +253,7 @@ In C#, both `IEnumerable` and `IQueryable` are used to represent collections of 
 - **Deferred Execution**: Supports deferred execution, meaning the query is not executed until the data is enumerated (e.g., using `foreach` loop).
 - **Extension Methods**: LINQ extension methods for `IEnumerable` are defined in `System.Linq.Enumerable`.
 
-![IEnumerableClientFilter](IEnumerableClientFilter.png)
+![IEnumerableClientFilter](Images/IEnumerableClientFilter.png)
 
 **Example**:
 
@@ -275,7 +275,7 @@ foreach (int number in query)
 - **Deferred Execution**: Supports deferred execution, similar to `IEnumerable`.
 - **Extension Methods**: LINQ extension methods for `IQueryable` are defined in `System.Linq.Queryable`.
 
-![IQueryableDatabaseFilter](IQueryableDatabaseFilter.png)
+![IQueryableDatabaseFilter](Images/IQueryableDatabaseFilter.png)
 
 **Example**:
 
@@ -313,7 +313,7 @@ By understanding these differences, you can make informed decisions on which int
 
 The `yield` keyword in C# is used to simplify the creation of iterators, which are used to traverse collections or streams of data. It enables the implementation of a stateful iterator method without the need to explicitly maintain the state and manage the enumeration logic.
 
-![yield](Yield.png)
+![yield](Images/Yield.png)
 
 Here are some real-time usage examples:
 
