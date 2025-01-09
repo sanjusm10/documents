@@ -1,0 +1,204 @@
+## ***1. How lazy loading works in entity framework***
+
+In Entity Framework, lazy loading is a feature that delays the loading of related data until it is explicitly requested. This can help improve performance by loading only the data that is actually needed. Lazy loading is particularly useful when working with large datasets or when accessing related entities that might not always be required.
+
+### **How Lazy Loading Works:**
+
+When lazy loading is enabled, Entity Framework creates proxy classes that override virtual navigation properties. When a navigation property is accessed for the first time, a query is automatically sent to the database to load the related data.
+
+### **Setting Up Lazy Loading:**
+
+To use lazy loading in Entity Framework, you need to follow these steps:
+
+1. **Ensure Navigation Properties are Virtual**:
+   Navigation properties must be marked as `virtual` for Entity Framework to create proxy classes.
+
+2. **Enable Lazy Loading**:
+   Lazy loading is enabled by default in Entity Framework. If it has been disabled, you can enable it in the `DbContext` constructor.
+
+### **Example:**
+
+Consider a simple model with two entities: `Author` and `Book`. Each author can have multiple books.
+
+**Step 1: Define the Entities with Virtual Navigation Properties**:
+
+```csharp
+public class Author
+{
+    public int AuthorId { get; set; }
+    public string Name { get; set; }
+    public virtual ICollection<Book> Books { get; set; } // Virtual navigation property
+}
+
+public class Book
+{
+    public int BookId { get; set; }
+    public string Title { get; set; }
+    public virtual Author Author { get; set; } // Virtual navigation property
+}
+```
+
+**Step 2: Define the DbContext and Enable Lazy Loading**:
+
+```csharp
+public class LibraryContext : DbContext
+{
+    public DbSet<Author> Authors { get; set; }
+    public DbSet<Book> Books { get; set; }
+
+    public LibraryContext()
+    {
+        // Enable lazy loading if not already enabled
+        this.Configuration.LazyLoadingEnabled = true;
+    }
+}
+```
+
+**Step 3: Use Lazy Loading in Code**:
+
+```csharp
+public class Program
+{
+    public static void Main()
+    {
+        using (var context = new LibraryContext())
+        {
+            // Add sample data
+            var author = new Author { Name = "John Doe" };
+            context.Authors.Add(author);
+            context.Books.Add(new Book { Title = "C# Fundamentals", Author = author });
+            context.Books.Add(new Book { Title = "Advanced C#", Author = author });
+            context.SaveChanges();
+
+            // Retrieve the author
+            var retrievedAuthor = context.Authors.FirstOrDefault(a => a.Name == "John Doe");
+
+            if (retrievedAuthor != null)
+            {
+                // Access the Books navigation property to trigger lazy loading
+                foreach (var book in retrievedAuthor.Books)
+                {
+                    Console.WriteLine($"Book Title: {book.Title}");
+                }
+            }
+        }
+    }
+}
+```
+
+**Explanation**:
+
+1. **Define Entities**: The `Author` and `Book` classes have virtual navigation properties (`Books` and `Author`, respectively) to enable lazy loading.
+2. **Define DbContext**: The `LibraryContext` class ensures that lazy loading is enabled.
+3. **Use Lazy Loading**: When retrieving an `Author` and accessing the `Books` navigation property, Entity Framework automatically loads the related `Book` entities from the database.
+
+### **Benefits and Considerations**
+
+- **Benefits**: Improves performance by loading data only when needed, reduces initial data loading time, and simplifies code for handling related data.
+- **Considerations**: Can lead to multiple database queries if not used carefully, potentially impacting performance. It's important to monitor and optimize the number of queries generated.
+
+By understanding and utilizing lazy loading, you can efficiently manage related data in Entity Framework and improve the performance of your applications.
+
+## ***2. DbContext versus DbSet***
+
+In Entity Framework, `DbContext` and `DbSet` are fundamental concepts that help you interact with the database in an object-oriented manner. They serve different purposes and have different roles in managing database operations. Here’s a detailed comparison to help you understand the differences and how they work together:
+
+### **DbContext**
+
+- **Definition**: `DbContext` is a class that manages the database connection and is used to query and save data. It serves as a bridge between the domain model and the database.
+- **Responsibilities**:
+  - Managing database connections.
+  - Configuring the model and relationships.
+  - Tracking changes to entities.
+  - Coordinating database transactions.
+  - Providing access to `DbSet` properties.
+- **Usage**: You typically create a class that inherits from `DbContext` and define `DbSet` properties for each entity type in your model.
+
+**Example**:
+
+```csharp
+public class LibraryContext : DbContext
+{
+    public DbSet<Author> Authors { get; set; }
+    public DbSet<Book> Books { get; set; }
+
+    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+    {
+        optionsBuilder.UseSqlServer("your_connection_string_here");
+    }
+}
+```
+
+In this example, `LibraryContext` inherits from `DbContext` and provides `DbSet` properties for the `Author` and `Book` entities.
+
+### **DbSet**
+
+- **Definition**: `DbSet` represents a collection of entities of a specific type that you can query and save. It acts as a proxy for the database table associated with the entity type.
+- **Responsibilities**:
+  - Allowing LINQ queries to be written against the set of entities.
+  - Providing methods for adding, removing, and updating entities.
+  - Tracking changes to entities within the context.
+- **Usage**: You define `DbSet` properties in your `DbContext`-derived class and use them to interact with the entity sets.
+
+**Example**:
+
+```csharp
+public class Author
+{
+    public int AuthorId { get; set; }
+    public string Name { get; set; }
+    public virtual ICollection<Book> Books { get; set; }
+}
+
+public class Book
+{
+    public int BookId { get; set; }
+    public string Title { get; set; }
+    public virtual Author Author { get; set; }
+}
+
+public class LibraryContext : DbContext
+{
+    public DbSet<Author> Authors { get; set; }
+    public DbSet<Book> Books { get; set; }
+}
+```
+
+In this example, `DbSet<Author>` represents a collection of `Author` entities, and `DbSet<Book>` represents a collection of `Book` entities.
+
+### **Key Differences**
+
+| Feature            | DbContext                               | DbSet                                        |
+|--------------------|-----------------------------------------|----------------------------------------------|
+| **Definition**     | Manages the database connection and operations | Represents a collection of entities of a specific type |
+| **Responsibilities** | Configuring model, tracking changes, managing transactions | Querying, adding, removing, and updating entities |
+| **Usage**          | Inherit from DbContext and define DbSet properties | Define as properties in the DbContext class  |
+| **Scope**          | Acts as the overall context for the database | Acts as the proxy for individual tables/entities |
+
+### **How They Work Together**
+
+- **DbContext**: Provides the overall context and manages the connection to the database.
+- **DbSet**: Represents collections of entities that can be queried and modified within the context.
+
+**Example of Usage**:
+
+```csharp
+using (var context = new LibraryContext())
+{
+    // Add a new author
+    var author = new Author { Name = "John Doe" };
+    context.Authors.Add(author);
+    context.SaveChanges();
+
+    // Query authors
+    var authors = context.Authors.ToList();
+    foreach (var a in authors)
+    {
+        Console.WriteLine(a.Name);
+    }
+}
+```
+
+In this example, `LibraryContext` is used to manage the database connection and operations, while `DbSet<Author>` is used to add and query authors.
+
+Understanding the roles of `DbContext` and `DbSet` in Entity Framework helps you effectively manage database interactions and maintain a clean, organized codebase.
