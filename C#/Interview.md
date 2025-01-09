@@ -438,3 +438,174 @@ public static void Main()
 - **Readability**: Makes the code more readable and maintainable by abstracting the complexity of iterators.
 
 Using the `yield` keyword can greatly simplify the process of creating iterators and handling sequences, making your code more efficient and easier to understand.
+
+## ***5.Constant and ReadOnly in C#***
+
+In C#, both `const` and `readonly` are used to define values that should not change after they are set, but they have some key differences in their usage and behavior. Here's a detailed comparison:
+
+### **1. `const` (Constant)**
+
+- **Definition**: Constants are fixed values that cannot be changed after they are declared. They are implicitly static and must be initialized at the time of declaration.
+- **Scope**: Can only be used to define constants of primitive types (such as `int`, `float`, `char`, etc.), enums, or string literals.
+- **Initialization**: Must be initialized at the time of declaration and cannot be modified thereafter.
+
+**Example**:
+
+```csharp
+public class MyClass
+{
+    public const int MyConstant = 10;
+}
+```
+
+In this example, `MyConstant` is a constant value that is set to `10` and cannot be changed.
+
+### **2. `readonly`**
+
+- **Definition**: Readonly fields can be assigned a value either at the time of declaration or in a constructor. Once assigned, their values cannot be changed.
+- **Scope**: Can be used to define fields of any type, including complex types like objects and arrays.
+- **Initialization**: Can be initialized at the time of declaration or within a constructor, providing more flexibility compared to `const`.
+
+**Example**:
+
+```csharp
+public class MyClass
+{
+    public readonly int MyReadonlyField;
+
+    // Initialize in the constructor
+    public MyClass(int value)
+    {
+        MyReadonlyField = value;
+    }
+}
+```
+
+In this example, `MyReadonlyField` is a readonly field that is assigned a value in the constructor and cannot be modified thereafter.
+
+### **Key Differences**
+
+| Feature             | `const`                                    | `readonly`                                     |
+|---------------------|--------------------------------------------|------------------------------------------------|
+| **Initialization**  | At declaration                             | At declaration or in a constructor             |
+| **Value Type**      | Primitive types, enums, string literals    | Any type (primitive, complex objects, arrays)  |
+| **Mutability**      | Immutable after declaration                | Immutable after assignment                     |
+| **Scope**           | Implicitly static, accessed via class name | Instance-specific or static                    |
+| **Flexibility**     | Less flexible (must be assigned at declaration) | More flexible (can be assigned in constructors) |
+
+### **Usage Scenarios**
+
+- **Use `const`**: When you have values that are known at compile-time and will never change, such as mathematical constants (e.g., `Pi`) or fixed configuration values.
+- **Use `readonly`**: When you need values that can be assigned at runtime, such as configuration settings read from a file or values passed through constructors that should remain constant after initialization.
+
+### **Example Usage**
+
+```csharp
+public class Config
+{
+    // Constant value
+    public const string AppName = "MyApplication";
+
+    // Readonly value assigned through constructor
+    public readonly string ConnectionString;
+
+    public Config(string connectionString)
+    {
+        ConnectionString = connectionString;
+    }
+}
+
+public class Program
+{
+    public static void Main()
+    {
+        Config config = new Config("Server=myServer;Database=myDB;User=myUser;Password=myPass;");
+        Console.WriteLine(Config.AppName); // Output: MyApplication
+        Console.WriteLine(config.ConnectionString); // Output: Server=myServer;Database=myDB;User=myUser;Password=myPass;
+    }
+}
+```
+
+By understanding the differences and appropriate usage of `const` and `readonly`, you can write more robust and maintainable code.
+
+## ***6.Difference between Abstraction and Encapsulation***
+
+Abstraction and encapsulation are both fundamental concepts in object-oriented programming (OOP), but they serve different purposes. Let's explore the key differences between them:
+
+### **Abstraction**
+
+- **Purpose**: Abstraction focuses on hiding the complex implementation details and showing only the essential features of an object. It simplifies the complexity by exposing only what is necessary.
+- **Implementation**: Achieved through abstract classes and interfaces.
+- **Usage**: Helps in defining a clear contract or blueprint for a class without specifying the internal workings. It allows different implementations to follow the same contract.
+- **Example**: Abstracting the concept of a `Vehicle` class, showing only essential attributes like `speed` and `fuelCapacity`, without detailing the inner workings of each type of vehicle.
+
+**Example**:
+
+```csharp
+public abstract class Vehicle
+{
+    public int Speed { get; set; }
+    public int FuelCapacity { get; set; }
+
+    public abstract void StartEngine();
+    public abstract void StopEngine();
+}
+```
+
+In this example, the `Vehicle` class abstracts the concept of a vehicle, specifying essential features without detailing the implementation.
+
+### **Encapsulation**
+
+- **Purpose**: Encapsulation is about bundling the data (attributes) and methods (functions) that operate on the data into a single unit, or class. It also restricts direct access to some of an object's components, which can prevent accidental or unauthorized modifications.
+- **Implementation**: Achieved using access modifiers like `private`, `protected`, and `public`.
+- **Usage**: Ensures that the internal representation of an object is hidden from the outside, allowing controlled access through public methods (getters and setters).
+- **Example**: Encapsulating the properties of a `BankAccount` class to restrict direct access and modification of the account balance.
+
+**Example**:
+
+```csharp
+public class BankAccount
+{
+    private decimal balance;
+
+    public decimal Balance
+    {
+        get { return balance; }
+        private set { balance = value; }
+    }
+
+    public void Deposit(decimal amount)
+    {
+        if (amount > 0)
+        {
+            Balance += amount;
+        }
+    }
+
+    public void Withdraw(decimal amount)
+    {
+        if (amount > 0 && amount <= Balance)
+        {
+            Balance -= amount;
+        }
+    }
+}
+```
+
+In this example, the `BankAccount` class encapsulates the `balance` property, providing controlled access through the `Deposit` and `Withdraw` methods.
+
+### **Key Differences**
+
+| Feature             | Abstraction                                        | Encapsulation                                     |
+|---------------------|----------------------------------------------------|---------------------------------------------------|
+| **Purpose**         | Hide complex implementation, show essential features | Bundle data and methods, restrict access          |
+| **Implementation**  | Abstract classes and interfaces                    | Access modifiers (private, protected, public)     |
+| **Focus**           | Defining a clear contract or blueprint              | Protecting and controlling access to data         |
+| **Example**         | Abstract class `Vehicle`                           | Class `BankAccount` with private balance          |
+
+### **Summary**
+
+- **Abstraction**: Simplifies complexity by exposing only essential details and hiding the implementation. It is implemented using abstract classes and interfaces.
+- **Encapsulation**: Bundles data and methods into a single unit and restricts direct access to some components. It is implemented using access modifiers to control visibility.
+
+Understanding these concepts helps in designing robust and maintainable object-oriented systems, ensuring clear separation of concerns and protecting the integrity of data.
