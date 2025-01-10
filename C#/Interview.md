@@ -609,3 +609,86 @@ In this example, the `BankAccount` class encapsulates the `balance` property, pr
 - **Encapsulation**: Bundles data and methods into a single unit and restricts direct access to some components. It is implemented using access modifiers to control visibility.
 
 Understanding these concepts helps in designing robust and maintainable object-oriented systems, ensuring clear separation of concerns and protecting the integrity of data.
+
+## ***7.C# Out parameters Vs REF parameters***
+
+In C#, `out` and `ref` are keywords used to pass arguments by reference to a method. While both serve the purpose of passing variables by reference, they have different use cases and behaviors. Let's explore the differences with examples:
+
+### **`ref` Parameters**
+
+- **Definition**: The `ref` keyword allows a method to modify the value of a parameter and have that change reflected outside the method.
+- **Initialization**: The argument passed to a `ref` parameter must be initialized before it is passed to the method.
+
+**Example**:
+
+```csharp
+using System;
+
+public class Program
+{
+    public static void Main()
+    {
+        int number = 5;
+        MultiplyByTwo(ref number);
+        Console.WriteLine($"After MultiplyByTwo: {number}"); // Output: After MultiplyByTwo: 10
+    }
+
+    public static void MultiplyByTwo(ref int value)
+    {
+        value *= 2;
+    }
+}
+```
+
+In this example, the `ref` keyword is used to pass the `number` variable by reference to the `MultiplyByTwo` method. The method modifies the value, and the change is reflected outside the method.
+
+### **`out` Parameters**
+
+- **Definition**: The `out` keyword allows a method to return multiple values by modifying the arguments passed to it.
+- **Initialization**: The argument passed to an `out` parameter does not need to be initialized before it is passed to the method. However, the method must assign a value to the `out` parameter before it returns.
+
+**Example**:
+
+```csharp
+using System;
+
+public class Program
+{
+    public static void Main()
+    {
+        int result;
+        bool success = TryParseNumber("123", out result);
+        if (success)
+        {
+            Console.WriteLine($"Parsed number: {result}"); // Output: Parsed number: 123
+        }
+        else
+        {
+            Console.WriteLine("Failed to parse number.");
+        }
+    }
+
+    public static bool TryParseNumber(string input, out int value)
+    {
+        return int.TryParse(input, out value);
+    }
+}
+```
+
+In this example, the `out` keyword is used to return the parsed integer value from the `TryParseNumber` method. The method assigns a value to the `out` parameter, and the change is reflected outside the method.
+
+### **Key Differences**
+
+| Feature             | `ref` Parameters                              | `out` Parameters                              |
+|---------------------|-----------------------------------------------|----------------------------------------------|
+| **Initialization**  | Must be initialized before passing            | Does not need to be initialized before passing|
+| **Assignment**      | Can be optionally assigned within the method  | Must be assigned within the method           |
+| **Usage**           | Used for modifying existing values            | Used for returning multiple values           |
+| **Purpose**         | To pass arguments by reference and modify them | To return additional values from a method    |
+
+### **Summary**
+
+- **`ref` Parameters**: Use when you need to pass a variable by reference to a method and modify its value. The variable must be initialized before passing.
+- **`out` Parameters**: Use when you need to return multiple values from a method. The variable does not need to be initialized before passing, but the method must assign a value to it.
+
+By understanding the differences between `ref` and `out` parameters, you can choose the appropriate keyword for your specific use case, ensuring that your code is both efficient and clear.
