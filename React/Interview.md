@@ -171,3 +171,84 @@ class Greeting extends React.Component {
 - **Class Components**: Still useful, especially for legacy codebases and cases where you need to use lifecycle methods directly. However, with the introduction of Hooks, their use is less common in new code.
 
 By understanding these differences, you can choose the appropriate component type for your specific needs in a React application.
+
+## ***2. Lazy loading in reactjs***
+
+Lazy loading is an optimization technique in React that allows you to load components only when they are needed, rather than loading them all at once. This can significantly improve the performance of your application by reducing the initial load time and making better use of the network and browser resources.
+
+### **How Lazy Loading Works in React**
+
+1. **Code Splitting**: Breaks your application into smaller chunks that can be loaded on demand.
+2. **React.lazy**: A function that lets you render a dynamic import as a regular component.
+3. **Suspense**: A component that can wrap lazy-loaded components and handle loading states.
+
+### **Example**
+
+1. **Setup the Project Structure**:
+
+```plaintext
+src/
+├── components/
+│   ├── HeavyComponent.js
+│   └── AnotherComponent.js
+└── App.js
+```
+
+2. **HeavyComponent.js**:
+
+```javascript
+import React from 'react';
+
+const HeavyComponent = () => {
+    return (
+        <div>
+            <h1>This is a Heavy Component</h1>
+            <p>Loaded only when needed.</p>
+        </div>
+    );
+};
+
+export default HeavyComponent;
+```
+
+3. **App.js**:
+
+```javascript
+import React, { Suspense, lazy } from 'react';
+
+// Lazy load the HeavyComponent
+const HeavyComponent = lazy(() => import('./components/HeavyComponent'));
+
+const App = () => {
+    return (
+        <div>
+            <h1>React Lazy Loading Example</h1>
+            <Suspense fallback={<div>Loading...</div>}>
+                <HeavyComponent />
+            </Suspense>
+        </div>
+    );
+};
+
+export default App;
+```
+
+### **Explanation**
+
+1. **Code Splitting**: The application is structured in a way that allows parts of the code to be loaded separately. In this example, `HeavyComponent` is a component that may not be needed immediately.
+2. **React.lazy**: The `lazy` function is used to dynamically import `HeavyComponent`. This means `HeavyComponent` will only be loaded when it is actually rendered.
+3. **Suspense**: The `Suspense` component is used to wrap the lazy-loaded component and provide a fallback UI (like a loading spinner) while the component is being loaded.
+
+### **Benefits of Lazy Loading**
+
+- **Improved Performance**: By loading only the necessary components, the initial load time is reduced.
+- **Better Resource Utilization**: Network and browser resources are used more efficiently by loading resources only when needed.
+- **Enhanced User Experience**: Users can start interacting with the application sooner, even if some components are still loading in the background.
+
+### **Key Points**
+
+- **React.lazy**: Simplifies the process of lazy loading components by using dynamic imports.
+- **Suspense**: Provides a way to handle loading states and display fallback content while components are being loaded.
+- **Code Splitting**: Breaks the application into smaller chunks that can be loaded on demand, improving performance and resource utilization.
+
+By leveraging lazy loading, you can create more performant and responsive React applications, ensuring that users get a smoother experience.
