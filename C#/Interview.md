@@ -610,7 +610,7 @@ In this example, the `BankAccount` class encapsulates the `balance` property, pr
 
 Understanding these concepts helps in designing robust and maintainable object-oriented systems, ensuring clear separation of concerns and protecting the integrity of data.
 
-## ***7.C# Out parameters Vs REF parameters***
+## ***7.C# Out Vs REF parameters***
 
 In C#, `out` and `ref` are keywords used to pass arguments by reference to a method. While both serve the purpose of passing variables by reference, they have different use cases and behaviors. Let's explore the differences with examples:
 
@@ -692,3 +692,71 @@ In this example, the `out` keyword is used to return the parsed integer value fr
 - **`out` Parameters**: Use when you need to return multiple values from a method. The variable does not need to be initialized before passing, but the method must assign a value to it.
 
 By understanding the differences between `ref` and `out` parameters, you can choose the appropriate keyword for your specific use case, ensuring that your code is both efficient and clear.
+
+## ***8.record versus record struct***
+
+In C#, both `record` and `record struct` are used to define immutable data types, but they have some key differences in terms of usage and behavior. Here's a detailed comparison and usage examples for both:
+
+### **record**
+
+**Definition**: `record` is a reference type that provides built-in functionality for immutable data. It supports value-based equality, meaning that two record instances are considered equal if their properties are equal.
+
+**Example**:
+
+```csharp
+public record Person(string FirstName, string LastName);
+```
+
+**Usage**:
+
+```csharp
+var person1 = new Person("John", "Doe");
+var person2 = new Person("John", "Doe");
+
+// Value-based equality
+Console.WriteLine(person1 == person2); // Output: True
+
+// Immutable by default
+// person1.FirstName = "Jane"; // This will cause a compilation error
+```
+
+### **record struct**
+
+**Definition**: `record struct` is a value type that provides similar functionality to `record`, but it behaves like a struct. It supports value-based equality and is more memory-efficient for small data structures.
+
+**Example**:
+
+```csharp
+public record struct Point(int X, int Y);
+```
+
+**Usage**:
+
+```csharp
+var point1 = new Point(3, 4);
+var point2 = new Point(3, 4);
+
+// Value-based equality
+Console.WriteLine(point1 == point2); // Output: True
+
+// Immutable by default
+// point1.X = 5; // This will cause a compilation error
+```
+
+### **Key Differences**
+
+| Feature                  | `record`                                | `record struct`                          |
+|--------------------------|-----------------------------------------|-----------------------------------------|
+| **Type**                 | Reference type                          | Value type                              |
+| **Equality**             | Value-based equality                    | Value-based equality                    |
+| **Memory Efficiency**    | Less efficient for small data structures | More efficient for small data structures|
+| **Default Immutability** | Immutable by default                    | Immutable by default                    |
+| **Usage**                | Suitable for larger, complex data types | Suitable for small, simple data types   |
+
+### **When to Use Each**
+
+- **Use `record`**: When you need to define larger, complex data types with value-based equality. Records are ideal for use cases where reference semantics are important and where the data structures might be more complex.
+
+- **Use `record struct`**: When you need to define small, simple data types that benefit from value-based equality and memory efficiency. Record structs are ideal for use cases where value semantics are important and where you want to avoid the overhead associated with reference types.
+
+By understanding the differences between `record` and `record struct`, you can choose the appropriate type for your specific needs, ensuring optimal performance and behavior in your C# applications.
