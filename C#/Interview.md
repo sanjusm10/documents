@@ -760,3 +760,76 @@ Console.WriteLine(point1 == point2); // Output: True
 - **Use `record struct`**: When you need to define small, simple data types that benefit from value-based equality and memory efficiency. Record structs are ideal for use cases where value semantics are important and where you want to avoid the overhead associated with reference types.
 
 By understanding the differences between `record` and `record struct`, you can choose the appropriate type for your specific needs, ensuring optimal performance and behavior in your C# applications.
+
+## ***9.c# virtual versus abstract Keyword***
+
+In C#, `abstract` and `virtual` keywords are used to create methods in base classes that can be overridden in derived classes, but they have some differences.
+
+**Abstract Methods:**
+
+- Must be declared in an abstract class.
+- Cannot have an implementation in the base class; only the method signature.
+- Any class inheriting from the abstract class must implement the abstract method.
+
+**Virtual Methods:**
+
+- Can be declared in any class.
+- Can have an implementation in the base class.
+- Derived classes can override the virtual method, but they are not required to do so.
+
+Here's a small example to illustrate:
+
+```csharp
+using System;
+
+abstract class Animal
+{
+    public abstract void MakeSound(); // Abstract method, no implementation.
+    public virtual void Sleep() // Virtual method with implementation.
+    {
+        Console.WriteLine("Sleeping...");
+    }
+}
+
+class Dog : Animal
+{
+    public override void MakeSound()
+    {
+        Console.WriteLine("Woof!");
+    }
+
+    public override void Sleep()
+    {
+        Console.WriteLine("Dog is sleeping...");
+    }
+}
+
+class Program
+{
+    static void Main(string[] args)
+    {
+        Dog myDog = new Dog();
+        myDog.MakeSound(); // Output: Woof!
+        myDog.Sleep(); // Output: Dog is sleeping...
+    }
+}
+```
+
+In this example:
+
+- `MakeSound()` is an abstract method, so the `Dog` class must provide an implementation for it.
+- `Sleep()` is a virtual method with a default implementation, but the `Dog` class can override it to provide a specific behavior.
+
+Choosing between `abstract` and `virtual` depends on the scenario you're dealing with:
+
+1. **Abstract:**
+   - Use when you want to enforce that every derived class must provide an implementation for a particular method.
+   - Suitable when the base class can't provide a meaningful implementation of the method.
+   - Example: In an abstract class `Shape`, having an abstract method `Draw()` makes sense because each specific shape (circle, rectangle, etc.) will have its own way of drawing.
+
+2. **Virtual:**
+   - Use when you want to provide a default behavior in the base class that can be overridden by derived classes.
+   - Suitable when the base class can provide a meaningful implementation, but you want derived classes to have the option to customize it.
+   - Example: In a class `Vehicle`, having a virtual method `StartEngine()` might be useful because most vehicles will start in a similar way, but specific vehicles can customize the behavior.
+
+In essence, use `abstract` to enforce method implementation and `virtual` to provide optional customization.

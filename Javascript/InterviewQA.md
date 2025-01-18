@@ -501,3 +501,85 @@ fetchData()
 | **Use Case**           | Simple asynchronous tasks               | Complex asynchronous workflows                 |
 
 By understanding the differences between callbacks and promises, you can choose the right approach for handling asynchronous operations in your JavaScript code.
+
+## ***8. What is the use of closure?***
+
+Closures are a fundamental and powerful feature in JavaScript that allow a function to access variables from its outer scope even after the outer function has finished executing. Essentially, closures enable functions to "remember" the environment in which they were created.
+
+Here are some key uses of closures:
+
+1. **Data Encapsulation:**
+   Closures can be used to create private variables and functions. This helps in encapsulating data and protecting it from being accessed or modified directly from outside the function.
+
+   ```javascript
+   function createCounter() {
+       let count = 0;
+       return {
+           increment: function() {
+               count++;
+               return count;
+           },
+           decrement: function() {
+               count--;
+               return count;
+           }
+       };
+   }
+
+   const counter = createCounter();
+   console.log(counter.increment()); // Output: 1
+   console.log(counter.increment()); // Output: 2
+   console.log(counter.decrement()); // Output: 1
+   ```
+
+2. **Function Factories:**
+   Closures can be used to create functions with customized behavior.
+
+   ```javascript
+   function createMultiplier(multiplier) {
+       return function(number) {
+           return number * multiplier;
+       };
+   }
+
+   const double = createMultiplier(2);
+   const triple = createMultiplier(3);
+
+   console.log(double(5)); // Output: 10
+   console.log(triple(5)); // Output: 15
+   ```
+
+3. **Callbacks and Event Handlers:**
+   Closures are often used in asynchronous programming, such as with callbacks and event handlers, to maintain access to variables from the outer scope.
+
+   ```javascript
+   function fetchData(url) {
+       const xhr = new XMLHttpRequest();
+       xhr.open("GET", url);
+       xhr.onload = function() {
+           if (xhr.status === 200) {
+               console.log(`Response from ${url}: ${xhr.responseText}`);
+           }
+       };
+       xhr.send();
+   }
+
+   fetchData("https://api.example.com/data");
+   ```
+
+4. **Partial Application and Currying:**
+   Closures can be used to partially apply arguments to a function or create curried functions.
+
+   ```javascript
+   function greet(greeting) {
+       return function(name) {
+           console.log(`${greeting}, ${name}!`);
+       };
+   }
+
+   const sayHello = greet("Hello");
+   sayHello("Alice"); // Output: Hello, Alice!
+   sayHello("Bob"); // Output: Hello, Bob!
+   ```
+
+Closures allow for more modular, maintainable, and reusable code by enabling the creation of private variables, customized functions, and efficient callback handling. They are an essential tool in the JavaScript developer's toolkit.

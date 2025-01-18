@@ -112,7 +112,50 @@ ecommerce-app/
 
 This structure should help you get started with your Angular e-commerce application.
 
-## ***1.Angular ecommerce application breakdown structure***
+## ***2.Angular Change Detection***
+
+Angular's Change Detection is a vital part of the Angular framework. It ensures that the user interface (UI) always reflects the most recent state of the application data. Here's a concise overview:
+
+### Angular Change Detection
+
+1. **What It Is**:
+    - Change Detection keeps track of changes in the application's state and updates the DOM to reflect these changes.
+
+2. **How It Works**:
+    - Angular creates a component tree to detect changes. When an event such as user input, HTTP request, or a timer triggers a change, Angular runs its change detection cycle.
+    - Each component in the tree has a change detector. When a change occurs, the change detector checks the new state against the old state and updates the DOM if there are differences.
+
+3. **Strategies**:
+    - **Default**: Angular runs change detection on all components.
+    - **OnPush**: Change detection only runs when a specific input changes or when an event occurs within the component.
+
+4. **Lifecycle Hooks**:
+    - Hooks like `ngOnChanges`, `ngDoCheck`, and `ngAfterViewChecked` allow developers to run custom logic during the change detection cycle.
+
+5. **Optimizations**:
+    - Use `OnPush` strategy for performance-critical components.
+    - Manually trigger change detection using `ChangeDetectorRef` for fine-grained control.
+
+### Example
+
+Here's a simple example to illustrate:
+
+```typescript
+import { Component, ChangeDetectionStrategy, Input } from '@angular/core';
+
+@Component({
+  selector: 'app-my-component',
+  template: `<div>{{ data }}</div>`,
+  changeDetection: ChangeDetectionStrategy.OnPush
+})
+export class MyComponent {
+  @Input() data: string;
+}
+```
+
+In this example, `MyComponent` uses the `OnPush` change detection strategy, which only updates the component when the `data` input changes.
+
+Understanding and optimizing Angular's Change Detection can significantly improve the performance and responsiveness of your application.
 
 ## ***1.Angular ecommerce application breakdown structure***
 
