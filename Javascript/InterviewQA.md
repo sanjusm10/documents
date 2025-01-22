@@ -1,4 +1,143 @@
-## ***1. Module and Class in js***
+## ***1. Javascript ES6 Features***
+
+JavaScript ES6 (ECMAScript 2015) introduced several powerful features that enhance the language's capabilities and developer experience. Here are some of the key features:
+
+### 1. **Arrow Functions**
+
+Arrow functions provide a more concise syntax for writing functions and lexically bind the `this` value.
+
+```javascript
+const add = (a, b) => a + b;
+```
+
+### 2. **Let and Const**
+
+`let` and `const` are block-scoped variable declarations.
+
+```javascript
+let mutableVar = 10;
+const immutableVar = 20;
+```
+
+### 3. **Template Literals**
+
+Template literals allow for easier string interpolation and multi-line strings.
+
+```javascript
+const name = 'John';
+const greeting = `Hello, ${name}!`;
+```
+
+### 4. **Default Parameters**
+
+Functions can now have default parameter values.
+
+```javascript
+function greet(name = 'Guest') {
+  return `Hello, ${name}!`;
+}
+```
+
+### 5. **Destructuring Assignment**
+
+Destructuring allows for unpacking values from arrays or properties from objects into distinct variables.
+
+```javascript
+const person = { name: 'Alice', age: 30 };
+const { name, age } = person;
+```
+
+### 6. **Rest and Spread Operators**
+
+The rest operator (`...`) collects all remaining elements into an array, while the spread operator (`...`) expands an array into individual elements.
+
+```javascript
+const nums = [1, 2, 3, 4];
+const [first, ...rest] = nums; // Rest
+const newNums = [...nums, 5, 6]; // Spread
+```
+
+### 7. **Classes**
+
+ES6 introduces a syntax for defining classes and inheritance.
+
+```javascript
+class Person {
+  constructor(name, age) {
+    this.name = name;
+    this.age = age;
+  }
+
+  greet() {
+    return `Hello, my name is ${this.name}.`;
+  }
+}
+```
+
+### 8. **Modules**
+
+ES6 introduces a module system for better code organization.
+
+```javascript
+// person.js
+export const name = 'Alice';
+export function greet() {
+  return `Hello, ${name}`;
+}
+
+// main.js
+import { name, greet } from './person.js';
+```
+
+### 9. **Promises**
+
+Promises provide a cleaner way to handle asynchronous operations.
+
+```javascript
+const fetchData = () => {
+  return new Promise((resolve, reject) => {
+    // Simulate async operation
+    setTimeout(() => resolve('Data fetched'), 1000);
+  });
+};
+
+fetchData().then((data) => console.log(data));
+```
+
+### 10. **Enhanced Object Literals**
+
+Enhanced object literals provide shorthand syntax for defining properties and methods.
+
+```javascript
+const name = 'Alice';
+const person = {
+  name,
+  greet() {
+    return `Hello, my name is ${this.name}.`;
+  }
+};
+```
+
+### 11. **Iterators and Generators**
+
+Iterators and generators provide a way to define custom iteration behavior.
+
+```javascript
+function* generator() {
+  yield 1;
+  yield 2;
+  yield 3;
+}
+
+const iter = generator();
+for (const value of iter) {
+  console.log(value); // Output: 1 2 3
+}
+```
+
+These features significantly improve the readability, maintainability, and expressiveness of JavaScript code.
+
+## ***2. Module and Class in js***
 
 In JavaScript, both modules and classes are essential features that help organize and structure your code, especially as it grows in complexity. Let's explore each concept in detail:
 
@@ -101,7 +240,7 @@ console.log(bob.study()); // Output: Bob is studying in grade 12th.
 
 Understanding both modules and classes can greatly enhance your ability to write clean, maintainable, and scalable JavaScript code.
 
-## ***2. Difference between let and var***
+## ***3. Difference between let and var***
 
 In JavaScript, `let` and `var` are both used to declare variables, but they have some key differences. Here's a comparison to help you understand when and how to use each:
 
@@ -188,7 +327,7 @@ let letVariable = "Second declaration"; // SyntaxError: Identifier 'letVariable'
 - Use `let` when you need block scope and want to avoid issues with variable re-declaration.
 - Use `var` when you need function scope, although it's generally recommended to use `let` (or `const`) for better scoping rules and to avoid potential bugs.
 
-## ***3. What is hoisting in JavaScript?***
+## ***4. What is hoisting in JavaScript?***
 
 **Hoisting** is a JavaScript behavior where variable and function declarations are moved to the top of their containing scope during the compilation phase. This means that you can use variables and functions before they are declared in the code.
 
@@ -242,7 +381,7 @@ In this example, the function declaration `myFunction` is hoisted to the top, so
 
 Understanding hoisting helps avoid unexpected behavior in JavaScript code and ensures that you declare and initialize variables and functions in the correct order.
 
-## ***4. Rest operator in es6 JavaScript?***
+## ***5. Rest operator in es6 JavaScript?***
 
 The rest operator in ES6 (ECMAScript 2015) is represented by three dots (`...`) and allows you to collect the remaining elements or properties into an array or object. It is often used in function parameters and destructuring assignments. Here are a few common use cases:
 
@@ -300,7 +439,7 @@ In this example, `name` captures the `name` property, and `...details` collects 
 
 The rest operator enhances the flexibility and readability of your code by simplifying the handling of variable numbers of parameters or properties.
 
-## ***5. Shallow copy versus deep copy in JavaScript?***
+## ***6. Shallow copy versus deep copy in JavaScript?***
 
 In JavaScript, copying objects and arrays can be done using shallow copy or deep copy techniques. Understanding the difference between them is crucial for managing and manipulating data correctly.
 
@@ -362,7 +501,7 @@ In this example, changing the nested object in `deepCopy` does not affect `origi
 
 Understanding when to use shallow or deep copy techniques is important for managing data integrity and preventing unintended side effects in your applications.
 
-## ***6. Map versus reduce function in JavaScrip?***
+## ***7. Map versus reduce function in JavaScrip?***
 
 The `map` and `reduce` functions are powerful array methods in JavaScript, each serving distinct purposes. Let's explore their differences, use cases, and examples:
 
@@ -414,7 +553,7 @@ In this example, `reduce` is used to calculate the sum of the numbers in the arr
 
 By understanding the distinctions between `map` and `reduce`, you can choose the appropriate method for your specific use case, leading to more readable and efficient code.
 
-## ***7. Promise versus callback in JavaScript?***
+## ***8. Promise versus callback in JavaScript?***
 
 In JavaScript, both promises and callbacks are used to handle asynchronous operations. Here’s a comparison to help you understand their differences, advantages, and use cases:
 
@@ -502,7 +641,7 @@ fetchData()
 
 By understanding the differences between callbacks and promises, you can choose the right approach for handling asynchronous operations in your JavaScript code.
 
-## ***8. What is the use of closure?***
+## ***9. What is the use of closure?***
 
 Closures are a fundamental and powerful feature in JavaScript that allow a function to access variables from its outer scope even after the outer function has finished executing. Essentially, closures enable functions to "remember" the environment in which they were created.
 
