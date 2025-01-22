@@ -687,4 +687,120 @@ Use directives in templates to show or hide elements based on user roles.
 
 Implementing role management ensures that only authorized users can access specific parts of your Angular application, enhancing security and user experience.
 
-## ***1.Angular ecommerce application breakdown structure***
+## ***7.How to increase the performance of the angular application***
+Improving the performance of an Angular application involves a combination of strategies at various levels, such as optimizing code, reducing resource usage, and enhancing browser rendering. Here's a comprehensive guide:
+
+---
+
+### **1. Optimize Change Detection**
+- **Use `OnPush` Change Detection Strategy**: This minimizes how often Angular checks for changes.
+  ```typescript
+  @Component({
+    changeDetection: ChangeDetectionStrategy.OnPush
+  })
+  export class MyComponent { }
+  ```
+- **Detach Change Detector**: Use `ChangeDetectorRef` to detach change detection for components where updates are not frequent.
+
+---
+
+### **2. Lazy Load Modules**
+- Split your app into feature modules and load them on demand.
+  ```typescript
+  const routes: Routes = [
+    { path: 'feature', loadChildren: () => import('./feature/feature.module').then(m => m.FeatureModule) }
+  ];
+  ```
+
+---
+
+### **3. Tree Shaking and AOT Compilation**
+- **Ahead-of-Time (AOT) Compilation**: Compile templates and components at build time, reducing runtime overhead.
+  ```bash
+  ng build --aot
+  ```
+- **Enable Tree Shaking**: Ensure unused code is removed during bundling.
+
+---
+
+### **4. Optimize Assets**
+- Minify and compress CSS, JavaScript, and images.
+- Use `sourceMap: false` in production builds.
+  ```bash
+  ng build --prod --source-map=false
+  ```
+- Implement lazy loading for images using libraries like `ngx-lazy-load-image`.
+
+---
+
+### **5. Use Angular CLI Best Practices**
+- Use `--build-optimizer` for production builds to remove Angular decorators and unused parts of the code.
+  ```bash
+  ng build --prod --build-optimizer
+  ```
+
+---
+
+### **6. Use Efficient RxJS Practices**
+- Use `take`, `takeUntil`, or `first` to manage subscriptions.
+- Use operators like `debounceTime` and `distinctUntilChanged` to reduce unnecessary processing.
+
+---
+
+### **7. Virtual Scrolling for Large Lists**
+For long lists, use Angular Material's virtual scrolling to load items on demand:
+```html
+<cdk-virtual-scroll-viewport itemSize="50">
+  <div *cdkVirtualFor="let item of items">{{ item }}</div>
+</cdk-virtual-scroll-viewport>
+```
+
+---
+
+### **8. Reduce Third-Party Dependencies**
+- Audit and remove unused dependencies.
+- Use lightweight alternatives where possible.
+
+---
+
+### **9. Preload and Cache Resources**
+- Use Angular's `PreloadAllModules` strategy to preload critical modules.
+  ```typescript
+  RouterModule.forRoot(routes, { preloadingStrategy: PreloadAllModules })
+  ```
+- Implement service workers for caching with Angular PWA.
+  ```bash
+  ng add @angular/pwa
+  ```
+
+---
+
+### **10. Optimize Template Rendering**
+- Use trackBy with `*ngFor` to minimize DOM updates.
+  ```html
+  <div *ngFor="let item of items; trackBy: trackByFn">{{ item }}</div>
+  ```
+- Avoid heavy logic in templates.
+
+---
+
+### **11. Monitor and Debug Performance**
+- Use tools like **Lighthouse**, **WebPageTest**, and **Chrome DevTools** to identify bottlenecks.
+- Use Angular’s **Performance Profiler** to debug specific issues.
+
+---
+
+### **12. Reduce Bundle Size**
+- Eliminate unused imports and use module-specific imports for Angular Material:
+  ```typescript
+  import { MatButtonModule } from '@angular/material/button';
+  ```
+- Use dynamic imports for rarely used modules.
+
+---
+
+### **13. Enable HTTP Caching**
+- Use `Cache-Control` headers to leverage browser caching.
+- Implement caching with Angular HTTP interceptors.
+
+---
