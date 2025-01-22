@@ -693,7 +693,7 @@ In this example, the `out` keyword is used to return the parsed integer value fr
 
 By understanding the differences between `ref` and `out` parameters, you can choose the appropriate keyword for your specific use case, ensuring that your code is both efficient and clear.
 
-## ***8.record versus record struct***
+## ***8.Record versus Record struct***
 
 In C#, both `record` and `record struct` are used to define immutable data types, but they have some key differences in terms of usage and behavior. Here's a detailed comparison and usage examples for both:
 
@@ -761,7 +761,7 @@ Console.WriteLine(point1 == point2); // Output: True
 
 By understanding the differences between `record` and `record struct`, you can choose the appropriate type for your specific needs, ensuring optimal performance and behavior in your C# applications.
 
-## ***9.c# virtual versus abstract Keyword***
+## ***9.c# Virtual versus Abstract Keyword***
 
 In C#, `abstract` and `virtual` keywords are used to create methods in base classes that can be overridden in derived classes, but they have some differences.
 
