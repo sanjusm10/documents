@@ -643,6 +643,10 @@ By understanding the differences between callbacks and promises, you can choose 
 
 ## ***9. What is the use of closure?***
 
+Closure :Function bundled with its lexical environment is known as a closure. Whenever function is returned, even if its vanished in execution context but still it remembers the reference it was pointing to. Its not just that function alone it returns but the entire closure and that's where it becomes interesting !
+
+![Closures](Closures.png)
+
 Closures are a fundamental and powerful feature in JavaScript that allow a function to access variables from its outer scope even after the outer function has finished executing. Essentially, closures enable functions to "remember" the environment in which they were created.
 
 Here are some key uses of closures:
@@ -722,3 +726,187 @@ Here are some key uses of closures:
    ```
 
 Closures allow for more modular, maintainable, and reusable code by enabling the creation of private variables, customized functions, and efficient callback handling. They are an essential tool in the JavaScript developer's toolkit.
+
+## ***10. How does this keyword works in javascript??***
+In JavaScript, the `this` keyword behaves differently depending on the context in which it's used. It's a bit of a chameleon, adapting to various environments, so it can be tricky at first. Here's a breakdown:
+
+1. **Global Context**: When used in the global context, `this` refers to the global object. In a browser, this would be the `window` object.
+   ```javascript
+   console.log(this); // window in a browser
+   ```
+
+2. **Function Context**: When used inside a function, `this` depends on how the function is called.
+   - Regular function call: In non-strict mode, `this` refers to the global object. In strict mode, `this` is `undefined`.
+     ```javascript
+     function myFunction() {
+       console.log(this);
+     }
+     myFunction(); // window (or undefined in strict mode)
+     ```
+
+   - Method call: When a function is called as a property of an object, `this` refers to the object the method is called on.
+     ```javascript
+     const myObject = {
+       myMethod: function() {
+         console.log(this);
+       }
+     };
+     myObject.myMethod(); // myObject
+     ```
+
+   - `new` keyword: When a function is used as a constructor with the `new` keyword, `this` refers to the new instance of the object created.
+     ```javascript
+     function MyConstructor() {
+       this.value = 42;
+     }
+     const instance = new MyConstructor();
+     console.log(instance.value); // 42
+     ```
+
+   - Arrow functions: In arrow functions, `this` is lexically bound, meaning it uses `this` from the surrounding code at the time the function is defined.
+     ```javascript
+     const myArrowFunction = () => {
+       console.log(this);
+     };
+     myArrowFunction(); // this refers to the surrounding context
+     ```
+
+3. **Event Handlers**: When used in an event handler, `this` refers to the element that received the event.
+   ```javascript
+   const button = document.querySelector('button');
+   button.addEventListener('click', function() {
+     console.log(this); // button element
+   });
+   ```
+
+Overall, understanding how `this` works in JavaScript involves knowing the context in which it's used. 
+
+## ***11. What is the purpose of Bind Method in javascript???***
+The `bind` method in JavaScript is used to create a new function that, when called, has its `this` keyword set to the provided value. It can also allow you to set the initial arguments for that function. Here's a breakdown of its purposes:
+
+1. **Explicitly Setting `this`**: `bind` is commonly used to set the `this` value explicitly when calling a function. This is especially useful when passing a method as a callback, ensuring it retains the correct context.
+   ```javascript
+   const obj = {
+     value: 42,
+     getValue: function() {
+       return this.value;
+     }
+   };
+
+   const getValue = obj.getValue;
+   console.log(getValue()); // undefined (or error in strict mode)
+
+   const boundGetValue = obj.getValue.bind(obj);
+   console.log(boundGetValue()); // 42
+   ```
+
+2. **Partial Application**: `bind` can also be used for partial application, where some of the arguments are pre-set when creating the new function.
+   ```javascript
+   function add(a, b) {
+     return a + b;
+   }
+
+   const addFive = add.bind(null, 5);
+   console.log(addFive(10)); // 15
+   ```
+
+3. **Function Borrowing**: `bind` allows borrowing methods from other objects by creating a new function with the `this` value set to the desired object.
+   ```javascript
+   const person = {
+     firstName: 'John',
+     lastName: 'Doe',
+     fullName: function() {
+       return this.firstName + ' ' + this.lastName;
+     }
+   };
+
+   const member = {
+     firstName: 'Jane',
+     lastName: 'Smith'
+   };
+
+   const getMemberFullName = person.fullName.bind(member);
+   console.log(getMemberFullName()); // Jane Smith
+   ```
+
+In summary, `bind` is a powerful tool for controlling the `this` context and for partially applying functions. It can make your code more predictable and easier to read, especially in scenarios where the context is crucial.
+
+
+## ***12. How does javascript handles code with async and await?***
+In JavaScript, `async` and `await` are used to handle asynchronous code in a more readable and synchronous-like manner. They are built on top of Promises and provide a cleaner syntax for working with asynchronous operations. Here's how they work:
+
+1. **Async Function**: The `async` keyword is used to define an asynchronous function. When a function is declared with `async`, it automatically returns a Promise. This means you can use `await` inside the function to pause execution until the Promise is resolved.
+   ```javascript
+   async function fetchData() {
+     // This function will return a Promise
+     return "Data fetched";
+   }
+   ```
+
+2. **Await Keyword**: The `await` keyword can only be used inside an `async` function. It is used to pause the execution of the function until the Promise is resolved. The resolved value of the Promise is then returned.
+   ```javascript
+   async function fetchData() {
+     const response = await fetch('https://api.example.com/data');
+     const data = await response.json();
+     return data;
+   }
+
+   fetchData().then(data => {
+     console.log(data);
+   });
+   ```
+
+3. **Error Handling**: You can use `try...catch` blocks to handle errors in async functions. This allows you to handle errors in a synchronous-like manner.
+   ```javascript
+   async function fetchData() {
+     try {
+       const response = await fetch('https://api.example.com/data');
+       const data = await response.json();
+       return data;
+     } catch (error) {
+       console.error('Error fetching data:', error);
+     }
+   }
+
+   fetchData();
+   ```
+
+4. **Sequential and Parallel Execution**: `async` and `await` make it easy to control the order of asynchronous operations.
+   - **Sequential Execution**: Operations are performed one after the other, waiting for each one to complete.
+     ```javascript
+     async function fetchSequential() {
+       const response1 = await fetch('https://api.example.com/data1');
+       const data1 = await response1.json();
+
+       const response2 = await fetch('https://api.example.com/data2');
+       const data2 = await response2.json();
+
+       return [data1, data2];
+     }
+
+     fetchSequential().then(data => {
+       console.log(data);
+     });
+     ```
+
+   - **Parallel Execution**: Multiple asynchronous operations can be performed in parallel using `Promise.all()`.
+     ```javascript
+     async function fetchParallel() {
+       const [response1, response2] = await Promise.all([
+         fetch('https://api.example.com/data1'),
+         fetch('https://api.example.com/data2')
+       ]);
+
+       const data1 = await response1.json();
+       const data2 = await response2.json();
+
+       return [data1, data2];
+     }
+
+     fetchParallel().then(data => {
+       console.log(data);
+     });
+     ```
+
+Overall, `async` and `await` make working with asynchronous code in JavaScript more straightforward and manageable by providing a cleaner syntax and better error-handling capabilities. 
+
