@@ -1422,3 +1422,168 @@ Higher-order functions provide a way to abstract behaviors and create more expre
 ![HOF](HOF.png)
 
 ![HOF_MAP_FUNCTION](HOF_MAP_FUNCTION.png)
+
+## ***23. What are call, apply and bind method in JavaScript?***
+The `call`, `apply`, and `bind` methods in JavaScript are used to control the `this` context within functions. They allow you to invoke functions with a specific `this` value and arguments, providing flexibility in how functions are executed. Here’s a breakdown of each method:
+
+1. **call()**:
+   The `call` method calls a function with a given `this` value and arguments provided individually. It immediately invokes the function.
+   ```javascript
+   function greet(greeting, punctuation) {
+     console.log(greeting + ', ' + this.name + punctuation);
+   }
+
+   const person = { name: 'Alice' };
+
+   greet.call(person, 'Hello', '!'); // Outputs: 'Hello, Alice!'
+   ```
+
+2. **apply()**:
+   The `apply` method is similar to `call`, but it accepts arguments as an array (or an array-like object) instead of individual parameters.
+   ```javascript
+   function greet(greeting, punctuation) {
+     console.log(greeting + ', ' + this.name + punctuation);
+   }
+
+   const person = { name: 'Alice' };
+
+   greet.apply(person, ['Hello', '!']); // Outputs: 'Hello, Alice!'
+   ```
+
+3. **bind()**:
+   The `bind` method creates a new function that, when called, has its `this` value set to a provided value, with a given sequence of arguments preceding any provided when the new function is called. It does not invoke the function immediately; instead, it returns a new function.
+   ```javascript
+   function greet(greeting, punctuation) {
+     console.log(greeting + ', ' + this.name + punctuation);
+   }
+
+   const person = { name: 'Alice' };
+
+   const greetAlice = greet.bind(person, 'Hello');
+   greetAlice('!'); // Outputs: 'Hello, Alice!'
+   ```
+
+### Summary:
+
+- **call()**: Invokes the function immediately, passing `this` and individual arguments.
+- **apply()**: Invokes the function immediately, passing `this` and arguments as an array.
+- **bind()**: Returns a new function, permanently setting `this` and optional initial arguments.
+
+![CallApplyBind](CallApplyBind.png)
+
+These methods are particularly useful when dealing with object-oriented programming and managing the `this` context within callbacks and event handlers.
+
+## ***24. What is Currying in Javascript?***
+Currying is a technique in functional programming where a function, instead of taking all arguments at once, takes the first argument and returns a new function that takes the next argument, and so on, until all arguments have been provided. This allows for the creation of more reusable and modular code.
+
+In JavaScript, currying can be implemented by creating functions that return other functions. Here’s an example to illustrate this concept:
+
+### Example of Currying
+
+Let's say we have a simple function that adds three numbers together:
+
+```javascript
+function add(a, b, c) {
+  return a + b + c;
+}
+
+console.log(add(1, 2, 3)); // Outputs: 6
+```
+
+We can transform this function into a curried version:
+
+```javascript
+function curriedAdd(a) {
+  return function (b) {
+    return function (c) {
+      return a + b + c;
+    };
+  };
+}
+
+const add1 = curriedAdd(1);
+const add1And2 = add1(2);
+const result = add1And2(3);
+
+console.log(result); // Outputs: 6
+```
+
+In this example, the `curriedAdd` function takes one argument `a` and returns a new function that takes the next argument `b`. This second function then returns another function that takes the final argument `c` and performs the addition.
+
+### Practical Use Case
+
+Currying is useful when you have a function that you call multiple times with some of the same arguments. For example, consider a function that calculates the volume of a box:
+
+```javascript
+function calculateVolume(length) {
+  return function (width) {
+    return function (height) {
+      return length * width * height;
+    };
+  };
+}
+
+const calculateVolumeWithLength5 = calculateVolume(5);
+const calculateVolumeWithLength5AndWidth3 = calculateVolumeWithLength5(3);
+
+const volume = calculateVolumeWithLength5AndWidth3(4);
+console.log(volume); // Outputs: 60
+```
+
+In this case, currying allows you to fix the length and width of the box and only change the height when needed, making the code more modular and easier to work with.
+
+![FunctionCurrying](FunctionCurrying.png)
+
+Currying can be especially powerful when combined with functions like `map`, `filter`, and `reduce`, allowing for greater code flexibility and reusability.
+
+## ***25. Polyfill for bind method in Javascript?***
+
+Certainly! A polyfill is a piece of code that provides functionality for older browsers that do not natively support that feature. Below is a polyfill for the `bind` method in JavaScript:
+
+```javascript
+if (!Function.prototype.bind) {
+  Function.prototype.bind = function (context) {
+    var func = this;
+    var args = Array.prototype.slice.call(arguments, 1);
+
+    return function () {
+      var newArgs = Array.prototype.slice.call(arguments);
+      return func.apply(context, args.concat(newArgs));
+    };
+  };
+}
+```
+
+### Explanation:
+
+1. **Checking if `bind` already exists**:
+   ```javascript
+   if (!Function.prototype.bind) {
+   ```
+
+2. **Defining the `bind` method**:
+   ```javascript
+   Function.prototype.bind = function (context) {
+   ```
+
+3. **Storing the reference to the original function (`this`)**:
+   ```javascript
+   var func = this;
+   ```
+
+4. **Collecting any arguments provided to `bind` (excluding the first `context` argument)**:
+   ```javascript
+   var args = Array.prototype.slice.call(arguments, 1);
+   ```
+
+5. **Returning a new function that will call the original function (`func`) with the correct `context` and combined arguments**:
+   ```javascript
+   return function () {
+     var newArgs = Array.prototype.slice.call(arguments);
+     return func.apply(context, args.concat(newArgs));
+   };
+   ```
+
+![Polyfill](Polyfill.png)
+
+This polyfill mimics the behavior of the native `bind` method, allowing you to use it in environments that do not support it natively. 
