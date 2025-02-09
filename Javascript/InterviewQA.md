@@ -551,6 +551,10 @@ In this example, `reduce` is used to calculate the sum of the numbers in the arr
 - **Use `map`**: When you need to apply a consistent transformation to each element in an array and obtain a new array of the same length.
 - **Use `reduce`**: When you need to combine all elements of an array into a single value, such as summing numbers, calculating averages, or merging objects.
 
+![Reduce](Reduce.png)
+
+![MapFilter](MapFilter.png)
+
 By understanding the distinctions between `map` and `reduce`, you can choose the appropriate method for your specific use case, leading to more readable and efficient code.
 
 ## ***8. Promise versus callback in JavaScript?***
