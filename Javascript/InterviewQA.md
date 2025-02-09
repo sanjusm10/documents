@@ -1297,3 +1297,124 @@ console.log(doubled); // Outputs: [2, 4, 6, 8, 10]
 In this example, the `map` method takes a callback function that doubles each number in the array.
 
 Callback functions are a powerful feature in JavaScript, enabling you to write more modular, maintainable, and asynchronous code.
+
+## ***21. What is event loop in javascript?***
+
+The event loop is a fundamental concept in JavaScript that handles asynchronous operations. JavaScript is single-threaded, meaning it can only execute one operation at a time. However, it uses the event loop to manage multiple tasks by organizing them into a queue and executing them one by one.
+
+Here's how it works:
+1. **Call Stack**: This is where your code gets executed, one frame at a time. When a function is called, it's pushed onto the stack, and when it returns, it's popped off.
+2. **Web APIs**: These are provided by the browser and handle tasks like AJAX requests, setTimeout, and DOM events. When one of these tasks is called, the browser takes over until it's ready to be processed.
+3. **Callback Queue**: Once the browser has completed a task, the callback function is moved to the callback queue.
+4. **Event Loop**: The event loop continuously checks if the call stack is empty. If it is, it moves the first task from the callback queue to the call stack to be executed.
+
+This process allows JavaScript to perform non-blocking operations, handling tasks like user interactions, API calls, and timers efficiently. In a nutshell, the event loop ensures that tasks are executed in the order they were added, but only when the call stack is empty.
+
+![EventLoopCallbackFunction1](EventLoopCallbackFunction1.png)
+
+![EventLoopCallbackFunction2](EventLoopCallbackFunction2.png)
+
+![EventLoopCallbackFunction3](EventLoopCallbackFunction3.png)
+
+Sure! Let's walk through an example of the event loop in JavaScript.
+
+Consider this piece of code:
+
+```javascript
+console.log('Start');
+
+setTimeout(() => {
+  console.log('Timeout callback');
+}, 2000);
+
+console.log('End');
+```
+
+Let's see what happens when we run this code:
+
+1. **Call Stack**: The engine starts executing the script.
+   - It encounters `console.log('Start')` and prints "Start".
+   - Next, it encounters `setTimeout` and delegates it to the Web API with a callback function to be executed after 2000 milliseconds (2 seconds). The timer starts but the callback function is not immediately added to the call stack.
+   - Then it encounters `console.log('End')` and prints "End".
+  
+2. **Web API**: The `setTimeout` function is handled by the Web API.
+   - After 2000 milliseconds, the callback function (`() => { console.log('Timeout callback'); }`) is moved to the callback queue.
+
+3. **Event Loop**: The event loop checks the call stack.
+   - It sees that the call stack is empty.
+   - It then takes the callback function from the callback queue and pushes it onto the call stack.
+
+4. **Call Stack**: The engine executes the callback function from the call stack.
+   - It encounters `console.log('Timeout callback')` and prints "Timeout callback".
+
+Output:
+```
+Start
+End
+Timeout callback
+```
+
+The "Start" and "End" messages are printed immediately because they are synchronous operations. The "Timeout callback" message is printed after 2000 milliseconds because it's an asynchronous operation handled by the event loop.
+
+The event loop ensures that the callback function is executed only after the call stack is empty and the timer has completed, allowing JavaScript to handle asynchronous tasks efficiently.
+
+## ***22. What are Higher-Order Functions in Javascript?***
+
+Higher-order functions in JavaScript are functions that can take other functions as arguments, return functions as their result, or both. They are a key feature in functional programming and allow for powerful and flexible code.
+
+Here are some key aspects of higher-order functions:
+
+1. **Taking Functions as Arguments**: Higher-order functions can accept other functions as input. This allows for creating reusable and modular code.
+   ```javascript
+   function repeat(operation, num) {
+     for (let i = 0; i < num; i++) {
+       operation();
+     }
+   }
+
+   function sayHello() {
+     console.log('Hello!');
+   }
+
+   // Usage
+   repeat(sayHello, 3); // Prints 'Hello!' three times
+   ```
+
+2. **Returning Functions**: Higher-order functions can also return other functions. This enables creating functions dynamically based on specific conditions.
+   ```javascript
+   function createMultiplier(multiplier) {
+     return function (num) {
+       return num * multiplier;
+     };
+   }
+
+   const double = createMultiplier(2);
+   console.log(double(5)); // Outputs 10
+   ```
+
+3. **Combining Both**: Higher-order functions can both take functions as arguments and return functions. This can lead to very powerful abstractions.
+   ```javascript
+   function compose(f, g) {
+     return function (x) {
+       return f(g(x));
+     };
+   }
+
+   function add5(num) {
+     return num + 5;
+   }
+
+   function multiplyBy2(num) {
+     return num * 2;
+   }
+
+   const add5ThenMultiplyBy2 = compose(multiplyBy2, add5);
+   console.log(add5ThenMultiplyBy2(5)); // Outputs 20
+   ```
+
+Higher-order functions provide a way to abstract behaviors and create more expressive and readable code. They are widely used in JavaScript libraries and frameworks, such as `map`, `filter`, and `reduce` in arrays.
+
+**Another Example**
+![HOF](HOF.png)
+
+![HOF_MAP_FUNCTION](HOF_MAP_FUNCTION.png)
