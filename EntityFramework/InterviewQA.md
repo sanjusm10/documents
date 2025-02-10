@@ -202,3 +202,131 @@ using (var context = new LibraryContext())
 In this example, `LibraryContext` is used to manage the database connection and operations, while `DbSet<Author>` is used to add and query authors.
 
 Understanding the roles of `DbContext` and `DbSet` in Entity Framework helps you effectively manage database interactions and maintain a clean, organized codebase.
+
+## ***3. Rollback of Migrations in Entity Framework Core***
+Rolling back migrations in Entity Framework Core can be crucial for maintaining the integrity of your database during development. Here’s a detailed explanation of how to rollback migrations:
+
+### 1. Understanding Migrations
+
+Migrations in Entity Framework Core allow you to evolve your database schema over time. Each migration represents a set of changes made to the model, which Entity Framework Core can apply to the database.
+
+### 2. Tools Required
+
+- **Visual Studio** or any IDE.
+- **Entity Framework Core** installed in your project.
+
+### 3. Generating a Migration
+
+First, let's generate a migration to understand the context. Assuming you have a model and DbContext, you would create a migration using the following command:
+
+```bash
+dotnet ef migrations add InitialCreate
+```
+
+This command creates a new migration file under the `Migrations` directory.
+
+### 4. Applying Migrations
+
+To apply the migration to the database, use the following command:
+
+```bash
+dotnet ef database update
+```
+
+### 5. Rolling Back Migrations
+
+To rollback migrations, you can use the `dotnet ef database update` command followed by the target migration name. For example:
+
+#### Rollback to a Specific Migration
+
+Assume you have the following migrations:
+1. `InitialCreate`
+2. `AddNewColumn`
+
+If you want to rollback to `InitialCreate`, use the following command:
+
+```bash
+dotnet ef database update InitialCreate
+```
+
+This command will rollback any migrations applied after `InitialCreate`.
+
+#### Rollback All Migrations
+
+To rollback all migrations, specify `0` (zero) as the target migration:
+
+```bash
+dotnet ef database update 0
+```
+
+This command will rollback all applied migrations and return the database to its initial state.
+
+### 6. Example Scenario
+
+Here’s an example with a simple `Product` model and two migrations:
+
+1. **Create the Product model**:
+
+```csharp
+public class Product
+{
+    public int Id { get; set; }
+    public string Name { get; set; }
+    public decimal Price { get; set; }
+}
+```
+
+2. **Initial migration**:
+
+```bash
+dotnet ef migrations add InitialCreate
+```
+
+3. **Apply the migration**:
+
+```bash
+dotnet ef database update
+```
+
+4. **Add a new column to the Product model**:
+
+```csharp
+public class Product
+{
+    public int Id { get; set; }
+    public string Name { get; set; }
+    public decimal Price { get; set; }
+    public string Description { get; set; } // New column
+}
+```
+
+5. **Create the second migration**:
+
+```bash
+dotnet ef migrations add AddDescriptionColumn
+```
+
+6. **Apply the second migration**:
+
+```bash
+dotnet ef database update
+```
+
+7. **Rollback to the initial migration**:
+
+```bash
+dotnet ef database update InitialCreate
+```
+
+### 7. Reverting Changes in Code
+
+Rolling back migrations will update the database schema, but remember to revert any changes made to the model classes or DbContext in your codebase.
+
+![RollbackMigrations1](RollbackMigrations1.png)
+
+![RollbackMigrations](RollbackMigrations.png)
+
+### Summary
+
+Rolling back migrations in Entity Framework Core involves using the `dotnet ef database update` command with the target migration name. This allows you to revert the database schema to a previous state, which is useful for undoing changes during development or testing.
+
