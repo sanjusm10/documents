@@ -2226,3 +2226,56 @@ Optimizing assets in a ReactJS application is crucial for improving performance,
 ### Conclusion
 
 By implementing these asset optimization strategies, you can significantly improve the performance of your ReactJS application. These optimizations not only reduce load times but also enhance the overall user experience by making the application more responsive and efficient.
+
+## ***17. How to focus an input element on page load in Reactjs?***
+Focusing an input element on page load in React.js can be done using the `useEffect` hook combined with a `ref`. Here's a detailed explanation and step-by-step guide on how to achieve this:
+
+1. **Setup a New React Project**: If you don't have a React project setup, create one using `create-react-app`.
+    ```sh
+    npx create-react-app focus-input
+    cd focus-input
+    npm start
+    ```
+
+2. **Create a Functional Component**: Let's create a functional component where we'll focus the input element on page load.
+
+    ```jsx
+    // src/App.js
+    import React, { useEffect, useRef } from 'react';
+
+    const App = () => {
+        // Create a ref using useRef hook
+        const inputRef = useRef(null);
+
+        // useEffect to focus the input on page load
+        useEffect(() => {
+            inputRef.current.focus();
+        }, []);
+
+        return (
+            <div>
+                <h1>Focus on Input Element on Page Load</h1>
+                <input type="text" ref={inputRef} placeholder="Focus me on page load" />
+            </div>
+        );
+    };
+
+    export default App;
+    ```
+
+3. **Explanation**:
+    - **useRef**: The `useRef` hook returns a mutable ref object whose `.current` property is initialized to the passed argument (`null` in this case). The returned object will persist for the full lifetime of the component.
+    - **useEffect**: This hook lets you perform side effects in function components. Here, it’s used to focus the input element after the component has been rendered to the DOM. The empty dependency array `[]` ensures this effect runs only once after the initial render (similar to `componentDidMount`).
+    - **inputRef.current.focus()**: This line accesses the DOM node directly and calls the `focus` method on the input element.
+
+4. **Run the Project**:
+    After setting up the above code, your project should focus on the input element when the page loads.
+
+Here’s a visual flow of how the components and hooks work together:
+```plaintext
+Functional Component -> Creates `inputRef` with `useRef`
+                    -> `useEffect` runs after initial render
+                    -> `inputRef.current` points to the input DOM element
+                    -> `inputRef.current.focus()` is called to focus the input
+```
+
