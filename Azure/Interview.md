@@ -109,6 +109,10 @@ Sure! Let's dive into the differences between **Azure Managed Identity** and **S
 - **Flexibility**: Offers more control and flexibility over the authentication process.
 - **Scope**: Can be used across multiple resources and tenants.
 
+![ManagedIdentity1](Images/ManagedIdentity1.png)
+![ManagedIdentity2](Images/ManagedIdentity2.png)
+![ManagedIdentity3](Images/ManagedIdentity3.png)
+
 ### **Key Differences**
 | Feature                   | Azure Managed Identity                          | Service Principal                              |
 |---------------------------|-------------------------------------------------|-----------------------------------------------|
