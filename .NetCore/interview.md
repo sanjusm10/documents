@@ -219,7 +219,127 @@ When registering services with the DI container, you can specify the lifecycle o
 
 Dependency Injection in .NET Core is a powerful feature that promotes decoupling and enhances the testability and maintainability of your applications. By leveraging the built-in DI container, you can easily manage the lifecycle and resolution of dependencies, making your code more modular and easier to manage.
 
-## ***4.What are REST guidelines ? What is the difference between REST and Restful?***
+## ***4.Types of dependency injection in .net core***
+Dependency Injection (DI) is a design pattern that helps achieve Inversion of Control (IoC) between classes and their dependencies. It allows for better modularity, testability, and maintainability of code. In .NET Core, there are three main types of dependency injection:
+
+### 1. **Constructor Injection**
+Constructor injection is the most common form of DI. Dependencies are provided through a class constructor, making it easy to see what dependencies a class requires.
+
+**Example**:
+```csharp
+public interface IMessageService
+{
+    void SendMessage(string message);
+}
+
+public class EmailMessageService : IMessageService
+{
+    public void SendMessage(string message)
+    {
+        // Send email
+    }
+}
+
+public class NotificationService
+{
+    private readonly IMessageService _messageService;
+
+    public NotificationService(IMessageService messageService)
+    {
+        _messageService = messageService;
+    }
+
+    public void Notify(string message)
+    {
+        _messageService.SendMessage(message);
+    }
+}
+```
+
+### 2. **Property Injection**
+Property injection allows dependencies to be set through public properties of a class. This is useful when the dependency is optional or can be replaced after the object is created.
+
+**Example**:
+```csharp
+public interface IMessageService
+{
+    void SendMessage(string message);
+}
+
+public class EmailMessageService : IMessageService
+{
+    public void SendMessage(string message)
+    {
+        // Send email
+    }
+}
+
+public class NotificationService
+{
+    public IMessageService MessageService { get; set; }
+
+    public void Notify(string message)
+    {
+        MessageService?.SendMessage(message);
+    }
+}
+```
+
+### 3. **Method Injection**
+Method injection provides dependencies through method parameters. This is useful for scenarios where the dependency is only needed for a specific method call.
+
+**Example**:
+```csharp
+public interface IMessageService
+{
+    void SendMessage(string message);
+}
+
+public class EmailMessageService : IMessageService
+{
+    public void SendMessage(string message)
+    {
+        // Send email
+    }
+}
+
+public class NotificationService
+{
+    public void Notify(string message, IMessageService messageService)
+    {
+        messageService.SendMessage(message);
+    }
+}
+```
+
+### Configuring Dependency Injection in .NET Core
+In .NET Core, you typically configure DI in the `Startup.cs` file using the `ConfigureServices` method. Here's an example of how to register services:
+
+```csharp
+public class Startup
+{
+    public void ConfigureServices(IServiceCollection services)
+    {
+        // Register services
+        services.AddTransient<IMessageService, EmailMessageService>();
+        services.AddTransient<NotificationService>();
+    }
+
+    public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+    {
+        // Configure middleware pipeline
+    }
+}
+```
+
+### Summary
+- **Constructor Injection**: Dependencies are provided through class constructors. It’s the most common and recommended type.
+- **Property Injection**: Dependencies are set through public properties, suitable for optional dependencies.
+- **Method Injection**: Dependencies are provided through method parameters, ideal for specific method calls.
+
+Each type of DI has its own use cases, and the choice depends on the specific requirements of your application. 
+
+## ***5.What are REST guidelines ? What is the difference between REST and Restful?***
 
 **REST (Representational State Transfer)** is an architectural style for designing networked applications, relying on a stateless, client-server communication protocol, typically HTTP. It emphasizes scalability, simplicity, and the use of standard HTTP methods.
 
@@ -236,7 +356,8 @@ Therefore, a RESTful API conforms to the REST constraints, ensuring a standardiz
 **REST Guidelines**
 ![REST Guidelines](Images/RESTGuidelines.png)
 
-## ***4.What is JWT Authentication?***
+## ***6.What is JWT Authentication?***
+
 **JWT (JSON Web Token) Authentication** is a secure method of authenticating users and securely transmitting information between parties as a JSON object. It's widely used in modern web applications for managing user sessions and authorization. Here's a detailed explanation:
 
 ### **Key Concepts**
@@ -348,7 +469,7 @@ Here's a simple example of implementing JWT authentication in a .NET Core applic
 ### **Summary**
 JWT Authentication is a robust and scalable method for securing web applications. By leveraging JWTs, you can ensure secure communication and authentication between clients and servers without the need for maintaining session state on the server.
 
-## ***4.How dependecy injection works in .net core***
+## ***7.How dependecy injection works in .net core***
 ## ***4.How dependecy injection works in .net core***
 ## ***4.How dependecy injection works in .net core***
 ## ***4.How dependecy injection works in .net core***

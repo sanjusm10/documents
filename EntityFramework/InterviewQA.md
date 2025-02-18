@@ -99,7 +99,95 @@ public class Program
 
 By understanding and utilizing lazy loading, you can efficiently manage related data in Entity Framework and improve the performance of your applications.
 
-## ***2. DbContext versus DbSet***
+## ***2. What is AsNoTracking in Entity Framework***
+
+`AsNoTracking` is a method in Entity Framework (EF) that allows you to execute a query without tracking the resulting entities in the change tracker. This can significantly improve performance for read-only queries where you do not need to update or delete the retrieved entities. Here’s a detailed explanation of `AsNoTracking`:
+
+### Why Use AsNoTracking?
+
+1. **Performance Improvement:**
+   - When you query data using Entity Framework, it by default tracks the changes made to the entities retrieved. This involves additional processing and memory usage.
+   - `AsNoTracking` disables change tracking for the entities, reducing the overhead and resulting in faster query execution and lower memory consumption.
+
+2. **Read-Only Scenarios:**
+   - `AsNoTracking` is ideal for scenarios where the data retrieved is intended for display or read-only purposes, and there is no intention to modify or save changes to these entities.
+   - Examples include generating reports, displaying data on dashboards, or exporting data.
+
+### How AsNoTracking Works
+
+When you use `AsNoTracking` in a query, Entity Framework bypasses the tracking of the entities in the context. This means that the context does not keep track of changes to these entities, and they are not added to the `DbSet`’s change tracker.
+
+### Syntax
+
+You can use `AsNoTracking` by appending it to your LINQ query as follows:
+
+```csharp
+using (var context = new YourDbContext())
+{
+    var products = context.Products
+        .AsNoTracking()
+        .Where(p => p.Category == "Electronics")
+        .ToList();
+}
+```
+
+### Example Scenario
+
+Let’s consider a simple example to illustrate how `AsNoTracking` can be used:
+
+#### Scenario:
+
+You have an e-commerce application, and you want to display a list of products in a specific category without modifying them.
+
+#### Without AsNoTracking:
+
+```csharp
+using (var context = new ECommerceDbContext())
+{
+    var products = context.Products
+        .Where(p => p.Category == "Electronics")
+        .ToList();
+    
+    // Display products (read-only)
+    foreach (var product in products)
+    {
+        Console.WriteLine(product.Name);
+    }
+}
+```
+
+In this example, Entity Framework tracks the changes to the `products` entities, even though you are only displaying the data.
+
+#### With AsNoTracking:
+
+```csharp
+using (var context = new ECommerceDbContext())
+{
+    var products = context.Products
+        .AsNoTracking()
+        .Where(p => p.Category == "Electronics")
+        .ToList();
+    
+    // Display products (read-only)
+    foreach (var product in products)
+    {
+        Console.WriteLine(product.Name);
+    }
+}
+```
+
+In this example, `AsNoTracking` is used, and Entity Framework does not track the changes to the `products` entities, resulting in better performance for read-only queries.
+
+### Summary
+
+- **What is AsNoTracking?** `AsNoTracking` is a method in Entity Framework that allows you to execute queries without tracking the resulting entities, improving performance for read-only scenarios.
+- **Why Use It?** It reduces the overhead of change tracking, resulting in faster query execution and lower memory consumption.
+- **When to Use It?** Use `AsNoTracking` in scenarios where the data retrieved is for display or read-only purposes, and there is no intention to modify or save changes to these entities.
+- **How to Use It?** Append `AsNoTracking` to your LINQ queries to disable change tracking for the entities.
+
+By using `AsNoTracking` in appropriate scenarios, you can optimize the performance of your Entity Framework queries and improve the overall efficiency of your application.
+
+## ***3. DbContext versus DbSet***
 
 In Entity Framework, `DbContext` and `DbSet` are fundamental concepts that help you interact with the database in an object-oriented manner. They serve different purposes and have different roles in managing database operations. Here’s a detailed comparison to help you understand the differences and how they work together:
 
@@ -203,7 +291,7 @@ In this example, `LibraryContext` is used to manage the database connection and 
 
 Understanding the roles of `DbContext` and `DbSet` in Entity Framework helps you effectively manage database interactions and maintain a clean, organized codebase.
 
-## ***3. Rollback of Migrations in Entity Framework Core***
+## ***4. Rollback of Migrations in Entity Framework Core***
 Rolling back migrations in Entity Framework Core can be crucial for maintaining the integrity of your database during development. Here’s a detailed explanation of how to rollback migrations:
 
 ### 1. Understanding Migrations
@@ -322,9 +410,9 @@ dotnet ef database update InitialCreate
 
 Rolling back migrations will update the database schema, but remember to revert any changes made to the model classes or DbContext in your codebase.
 
-![RollbackMigrations1](RollbackMigrations1.png)
+![RollbackMigrations1](Images/RollbackMigrations1.png)
 
-![RollbackMigrations](RollbackMigrations.png)
+![RollbackMigrations](Images/RollbackMigrations.png)
 
 ### Summary
 
