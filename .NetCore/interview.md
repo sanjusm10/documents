@@ -219,4 +219,137 @@ When registering services with the DI container, you can specify the lifecycle o
 
 Dependency Injection in .NET Core is a powerful feature that promotes decoupling and enhances the testability and maintainability of your applications. By leveraging the built-in DI container, you can easily manage the lifecycle and resolution of dependencies, making your code more modular and easier to manage.
 
+## ***4.What are REST guidelines ? What is the difference between REST and Restful?***
+
+**REST (Representational State Transfer)** is an architectural style for designing networked applications, relying on a stateless, client-server communication protocol, typically HTTP. It emphasizes scalability, simplicity, and the use of standard HTTP methods.
+
+**RESTful API** is an implementation that adheres to the principles and constraints of REST. This means the API is designed to leverage standard HTTP methods (GET, POST, PUT, DELETE), uses stateless communication, and represents resources in formats like JSON or XML. 
+
+In essence, while REST provides the guidelines, a RESTful API is an application that follows these guidelines.
+
+**Key Differences:**
+- **REST**: Refers to the set of architectural principles.
+- **RESTful**: Describes APIs that implement these principles.
+
+Therefore, a RESTful API conforms to the REST constraints, ensuring a standardized approach to building web services.
+
+**REST Guidelines**
+![REST Guidelines](Images/RESTGuidelines.png)
+
+## ***4.What is JWT Authentication?***
+**JWT (JSON Web Token) Authentication** is a secure method of authenticating users and securely transmitting information between parties as a JSON object. It's widely used in modern web applications for managing user sessions and authorization. Here's a detailed explanation:
+
+### **Key Concepts**
+
+1. **JWT Structure**:
+   - **Header**: Contains metadata about the token, such as the type of token (JWT) and the signing algorithm (e.g., HMAC SHA256).
+   - **Payload**: Contains the claims, which are statements about the user and additional data. Common claims include `iss` (issuer), `sub` (subject), `iat` (issued at), and `exp` (expiration).
+   - **Signature**: A cryptographic signature is created by encoding the header and payload and signing them using a secret key or a private key. This signature ensures the token's integrity.
+
+   A JWT looks like this: `eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c`
+
+2. **Authentication Process**:
+   - **User Login**: The user sends their credentials (e.g., username and password) to the server.
+   - **Token Generation**: The server validates the credentials and generates a JWT, which is then sent back to the client.
+   - **Token Storage**: The client stores the JWT (e.g., in local storage or a cookie) and includes it in the Authorization header of subsequent requests to the server.
+
+   ```http
+   Authorization: Bearer <your-jwt-token>
+   ```
+
+3. **Token Verification**:
+   - The server receives the JWT from the client and verifies its signature using the secret key or public key.
+   - If the token is valid and not expired, the server processes the request and grants access to the protected resources.
+
+### **Advantages**
+- **Stateless**: JWTs are self-contained, meaning they do not require the server to maintain session state. This makes them ideal for distributed systems.
+- **Scalability**: JWTs can easily scale across multiple servers without the need for centralized session storage.
+- **Security**: The signature ensures the token's integrity, and the claims can be encrypted to protect sensitive information.
+
+### **Example in .NET Core**
+Here's a simple example of implementing JWT authentication in a .NET Core application:
+
+1. **Install the Necessary NuGet Packages**:
+   ```sh
+   dotnet add package Microsoft.AspNetCore.Authentication.JwtBearer
+   ```
+
+2. **Configure JWT Authentication in `Startup.cs`**:
+   ```csharp
+   public void ConfigureServices(IServiceCollection services)
+   {
+       services.AddAuthentication(options =>
+       {
+           options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+           options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+       })
+       .AddJwtBearer(options =>
+       {
+           options.TokenValidationParameters = new TokenValidationParameters
+           {
+               ValidateIssuer = true,
+               ValidateAudience = true,
+               ValidateLifetime = true,
+               ValidateIssuerSigningKey = true,
+               ValidIssuer = "your-issuer",
+               ValidAudience = "your-audience",
+               IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("your-secret-key"))
+           };
+       });
+
+       services.AddControllers();
+   }
+
+   public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+   {
+       if (env.IsDevelopment())
+       {
+           app.UseDeveloperExceptionPage();
+       }
+
+       app.UseHttpsRedirection();
+       app.UseRouting();
+       app.UseAuthentication();
+       app.UseAuthorization();
+
+       app.UseEndpoints(endpoints =>
+       {
+           endpoints.MapControllers();
+       });
+   }
+   ```
+
+3. **Create a Token Generation Method**:
+   ```csharp
+   public string GenerateJwtToken(User user)
+   {
+       var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("your-secret-key"));
+       var credentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256);
+
+       var claims = new[]
+       {
+           new Claim(JwtRegisteredClaimNames.Sub, user.Username),
+           new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString())
+       };
+
+       var token = new JwtSecurityToken(
+           issuer: "your-issuer",
+           audience: "your-audience",
+           claims: claims,
+           expires: DateTime.Now.AddMinutes(30),
+           signingCredentials: credentials);
+
+       return new JwtSecurityTokenHandler().WriteToken(token);
+   }
+   ```
+
+![JWT Authentication](Images/JWTAuthentication.png)
+
+### **Summary**
+JWT Authentication is a robust and scalable method for securing web applications. By leveraging JWTs, you can ensure secure communication and authentication between clients and servers without the need for maintaining session state on the server.
+
+## ***4.How dependecy injection works in .net core***
+## ***4.How dependecy injection works in .net core***
+## ***4.How dependecy injection works in .net core***
+## ***4.How dependecy injection works in .net core***
 ## ***4.How dependecy injection works in .net core***
